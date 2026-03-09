@@ -61,8 +61,8 @@ export default function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-[#C6FF00] 
-                  transition-colors duration-300 relative group"
+                className="px-4 py-2 text-sm font-bold text-white hover:text-[#C6FF00] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] 
+                  transition-colors duration-300 relative group tracking-wider"
                 style={{ fontFamily: "var(--font-heading)" }}
               >
                 {link.name}
