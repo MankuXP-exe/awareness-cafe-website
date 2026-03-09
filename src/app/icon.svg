@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C6FF00" />
+      <stop offset="100%" stop-color="#9ECC00" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="120" height="120" rx="24" fill="#0a0a0a" />
+
+  <g transform="translate(10, 15)">
+    <!-- Cup Base -->
+    <path d="M 25 60 C 25 85, 45 95, 60 95 C 75 95, 95 85, 95 60 L 95 45 L 25 45 Z" fill="none" stroke="url(#neonGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    
+    <!-- Cup Handle -->
+    <path d="M 95 55 C 115 55, 120 65, 110 75 C 105 85, 95 80, 95 80" fill="none" stroke="url(#neonGradient)" stroke-width="7" stroke-linecap="round" />
+    
+    <!-- Steam forming an 'A' -->
+    <path d="M 60 35 C 50 25, 45 15, 60 5 C 75 -5, 75 15, 60 25 M 40 25 L 80 25" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 60 5 L 45 40 M 60 5 L 75 40" fill="none" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
