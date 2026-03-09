@@ -52,7 +52,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative bg-[#080808]">
+    <section id="contact" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative bg-[#080808] overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#C6FF00]/3 rounded-full blur-[150px]" />
 
       <div className="w-full lg:max-w-7xl lg:mx-auto relative">

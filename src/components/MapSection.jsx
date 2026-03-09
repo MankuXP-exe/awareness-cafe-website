@@ -4,7 +4,7 @@ import { MapPin } from "lucide-react";
 
 export default function MapSection() {
   return (
-    <section id="location" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative">
+    <section id="location" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="w-full lg:max-w-7xl lg:mx-auto">
         {/* Section Header */}
         <motion.div

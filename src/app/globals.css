@@ -22,6 +22,8 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
@@ -29,6 +31,8 @@
     color: #e0e0e0;
     font-family: var(--font-body);
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
     -webkit-font-smoothing: antialiased;
   }
 

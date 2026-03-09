@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="w-full overflow-x-hidden">
         <Hero />
         <About />
         <Menu />

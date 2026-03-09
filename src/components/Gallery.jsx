@@ -22,7 +22,7 @@ export default function Gallery() {
       : galleryImages.filter((img) => img.category === filter);
 
   return (
-    <section id="gallery" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative">
+    <section id="gallery" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#C6FF00]/3 rounded-full blur-[150px]" />
 
       <div className="w-full lg:max-w-7xl lg:mx-auto relative">

@@ -5,7 +5,7 @@ import { MapPin } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -21,8 +21,8 @@ export default function Hero() {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute top-20 right-10 w-72 h-72 bg-[#C6FF00]/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#C6FF00]/3 rounded-full blur-3xl" />
+      <div className="absolute top-20 right-0 w-72 h-72 bg-[#C6FF00]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-0 w-72 h-72 bg-[#C6FF00]/3 rounded-full blur-3xl pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 text-center">

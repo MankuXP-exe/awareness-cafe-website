@@ -11,7 +11,7 @@ const features = [
 
 export default function About() {
   return (
-    <section id="about" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative">
+    <section id="about" className="py-20 md:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-[#C6FF00]/3 rounded-full blur-[150px]" />
 
       <div className="w-full lg:max-w-7xl lg:mx-auto relative">
