@@ -9,7 +9,7 @@ export default function Hero() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/cafe front view.webp"
+          src="/images/bg.webp"
           alt="The Awareness Cafe"
           fill
           priority
