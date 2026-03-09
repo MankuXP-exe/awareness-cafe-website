@@ -13,7 +13,7 @@ export default function Hero() {
           alt="The Awareness Cafe"
           fill
           priority
-          className="object-cover object-center sm:object-bottom scale-110"
+          className="object-cover"
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-[#0a0a0a]/60 to-[#0a0a0a]" />
