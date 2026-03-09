@@ -84,7 +84,7 @@ export default function Menu() {
                 </div>
 
                 {/* Items Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {category.items.map((item, idx) => (
                     <MenuCard key={item.name} item={item} index={idx} categoryEmoji={category.emoji} />
                   ))}
@@ -131,14 +131,14 @@ function MenuCard({ item, index, categoryEmoji }) {
       className="glass-card overflow-hidden group"
     >
       {/* Image */}
-      <div className="relative h-40 sm:h-44 overflow-hidden bg-[#1a1a1a]">
+      <div className="relative w-full h-48 overflow-hidden bg-[#1a1a1a]">
         {!imgError ? (
           <Image
             src={item.image}
             alt={item.name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            sizes="(max-width:768px) 100vw, (max-width:1200px) 50vw, 25vw"
             onError={() => setImgError(true)}
           />
         ) : (
