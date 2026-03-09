@@ -53,9 +53,9 @@ export const menuData = [
     category: "Snacks",
     emoji: "🍟",
     items: [
-      { name: "Dahi Bhalla", price: "₹45", desc: "Soft lentil dumplings in creamy yogurt", image: "/menu/dahi-bhalla.png" },
-      { name: "Special Dahi Bhalla", price: "₹50", desc: "Premium dahi bhalla with extra toppings", image: "/menu/special-dahi-bhalla.png" },
-      { name: "Pani Puri", price: "₹20", desc: "Crispy puri with spiced tangy water", image: "/menu/pani-puri.png" },
+      { name: "Dahi Bhalla", price: "₹45", desc: "Soft lentil dumplings in creamy yogurt", image: "/menu/dahi-bhalla.webp" },
+      { name: "Special Dahi Bhalla", price: "₹50", desc: "Premium dahi bhalla with extra toppings", image: "/menu/special-dahi-bhalla.webp" },
+      { name: "Pani Puri", price: "₹20", desc: "Crispy puri with spiced tangy water", image: "/menu/pani-puri.webp" },
       { name: "French Fries", price: "₹69", desc: "Golden crispy fries, perfectly salted", image: "/menu/french-fries.png" },
       { name: "Cheesy French Fries", price: "₹99", desc: "Loaded fries with melted cheese", image: "/menu/cheesy-fries.png" },
     ],
@@ -76,8 +76,8 @@ export const menuData = [
     emoji: "🥪",
     items: [
       { name: "Brown Bread Sandwich", price: "₹45 / ₹90", desc: "Healthy brown bread with fresh fillings", image: "/menu/brown-bread-sandwich.png" },
-      { name: "White Bread Sandwich", price: "₹40 / ₹80", desc: "Classic white bread sandwich", image: "/menu/white-bread-sandwich.png" },
-      { name: "Multigrain Bread Sandwich", price: "₹40 / ₹80", desc: "Nutritious multigrain bread option", image: "/menu/multigrain-sandwich.png" },
+      { name: "White Bread Sandwich", price: "₹40 / ₹80", desc: "Classic white bread sandwich", image: "/menu/white-bread-sandwich.jpg" },
+      { name: "Multigrain Bread Sandwich", price: "₹40 / ₹80", desc: "Nutritious multigrain bread option", image: "/menu/multigrain-bread-sandwich.webp" },
       { name: "Thousand Island Sauce", price: "₹60 / ₹120", desc: "Sandwich with creamy thousand island sauce", image: "/menu/thousand-island-sandwich.png" },
     ],
   },
@@ -85,7 +85,7 @@ export const menuData = [
     category: "Tea",
     emoji: "☕",
     items: [
-      { name: "Milk Tea", price: "₹10", desc: "Classic Indian chai, hot & comforting", image: "/menu/milk-tea.png" },
+      { name: "Milk Tea", price: "₹10", desc: "Classic Indian chai, hot & comforting", image: "/menu/milk-tea.webp" },
       { name: "Black Tea", price: "₹10", desc: "Strong black tea, no milk, pure flavor", image: "/menu/black-tea.png" },
       { name: "Green Tea Varieties", price: "₹20", desc: "Healthy green tea in multiple flavors", image: "/menu/green-tea.png" },
     ],
