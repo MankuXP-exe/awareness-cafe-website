@@ -4,14 +4,15 @@ import { Plus, Pencil, Trash2, X, Save } from "lucide-react";
 import toast from "react-hot-toast";
 import { menuData } from "@/lib/data";
 
-const categories = ["Breakfast", "Shakes", "Smoothies", "Refreshments", "Burgers", "Snacks", "Pizza", "Sandwich", "Tea", "Coffee"];
+const categories = ["Breakfast", "Shakes", "Smoothies", "Refreshments", "Burgers", "Snacks", "Pizza", "Sandwich", "Tea", "Coffee", "Special", "Limited"];
 
 export default function AdminMenu() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState(null);
-  const [form, setForm] = useState({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true });
+  const [uploading, setUploading] = useState(false);
+  const [form, setForm] = useState({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true, file: null });
   const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : "";
 
   const fetchMenu = useCallback(async () => {
@@ -29,16 +30,50 @@ export default function AdminMenu() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUploading(true);
+
+    let finalImageUrl = form.image_url;
+
+    // Upload file if selected
+    if (form.file) {
+      const fd = new FormData();
+      fd.append("file", form.file);
+      try {
+        const uploadRes = await fetch("/api/admin/menu-upload", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
+        });
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json();
+          finalImageUrl = uploadData.url;
+        } else {
+          toast.error("Image upload failed");
+          setUploading(false);
+          return;
+        }
+      } catch (err) {
+        toast.error("Image upload error");
+        setUploading(false);
+        return;
+      }
+    }
+
     const method = editItem ? "PUT" : "POST";
-    const body = editItem ? { ...form, id: editItem.id } : { ...form };
+    const body = editItem ? { ...form, image_url: finalImageUrl, id: editItem.id } : { ...form, image_url: finalImageUrl };
+    // Remove the file object before sending JSON
+    delete body.file;
+
     const res = await fetch("/api/admin/menu", {
       method, headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(body),
     });
+
+    setUploading(false);
     if (res.ok) {
       toast.success(editItem ? "Updated!" : "Added!");
       setShowForm(false); setEditItem(null);
-      setForm({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true });
+      setForm({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true, file: null });
       fetchMenu();
     } else toast.error("Failed to save");
   };
@@ -57,7 +92,7 @@ export default function AdminMenu() {
 
   const openEdit = (item) => {
     setEditItem(item);
-    setForm({ name: item.name, description: item.description || item.desc || "", category: item.category, price: item.price, image_url: item.image_url || item.image || "", is_available: item.is_available !== false });
+    setForm({ name: item.name, description: item.description || item.desc || "", category: item.category, price: item.price, image_url: item.image_url || item.image || "", is_available: item.is_available !== false, file: null });
     setShowForm(true);
   };
 
@@ -68,7 +103,7 @@ export default function AdminMenu() {
           <h1 className="text-xl font-bold text-white">Menu Management</h1>
           <p className="text-[#8f93ac] text-sm mt-0.5">{items.length} items</p>
         </div>
-        <button onClick={() => { setEditItem(null); setForm({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true }); setShowForm(true); }}
+        <button onClick={() => { setEditItem(null); setForm({ name: "", description: "", category: "Breakfast", price: "", image_url: "", is_available: true, file: null }); setShowForm(true); }}
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#845adf] to-[#6e3bd0] text-white text-xs font-medium">
           <Plus className="w-3.5 h-3.5" /> Add Item
         </button>
@@ -110,17 +145,21 @@ export default function AdminMenu() {
                   className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50 resize-none" placeholder="Optional brief description of the food item..." />
               </div>
               <div>
-                <label className="text-white text-xs font-medium mb-1.5 block">Image URL</label>
-                <input type="text" value={form.image_url} onChange={e => setForm(p => ({ ...p, image_url: e.target.value }))}
-                  className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50" placeholder="https://... or /menu/item.png" />
-                <p className="text-[#8f93ac] text-[10px] mt-1">Provide a valid image link. If empty, a placeholder will be used.</p>
+                <label className="text-white text-xs font-medium mb-1.5 block">Image</label>
+                <div className="space-y-2">
+                  <input type="file" accept="image/*" onChange={e => setForm(p => ({ ...p, file: e.target.files?.[0] }))}
+                    className="w-full px-3 py-2 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm file:mr-2 file:bg-[#845adf] file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:text-xs" />
+                  <p className="text-[#8f93ac] text-[10px] text-center w-full block">OR provide an image URL below</p>
+                  <input type="text" value={form.image_url} onChange={e => setForm(p => ({ ...p, image_url: e.target.value }))}
+                    className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50" placeholder="https://..." />
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <input type="checkbox" id="avail" checked={form.is_available} onChange={e => setForm(p => ({ ...p, is_available: e.target.checked }))} className="accent-[#845adf]" />
-                <label htmlFor="avail" className="text-white text-sm">Available</label>
+                <label htmlFor="avail" className="text-white text-sm">Available for Ordering</label>
               </div>
-              <button type="submit" className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[#845adf] to-[#6e3bd0] text-white text-sm font-medium flex items-center justify-center gap-2">
-                <Save className="w-4 h-4" /> {editItem ? "Update" : "Add Item"}
+              <button type="submit" disabled={uploading} className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[#845adf] to-[#6e3bd0] text-white text-sm font-medium flex items-center justify-center gap-2 disabled:opacity-50">
+                <Save className="w-4 h-4" /> {uploading ? "Saving..." : (editItem ? "Update Item" : "Add Item")}
               </button>
             </form>
           </div>
