@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { LayoutDashboard, Package, UtensilsCrossed, Image as ImageIcon, Star, LogOut, Menu, X, ChevronRight, Bell } from "lucide-react";
+import { LayoutDashboard, Package, UtensilsCrossed, Image as ImageIcon, Star, LogOut, Menu, X, ChevronRight, Bell, MessageSquare } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard", badge: null },
@@ -11,10 +11,11 @@ const sidebarLinks = [
   { href: "/admin/menu", icon: UtensilsCrossed, label: "Menu Items", badge: null },
   { href: "/admin/gallery", icon: ImageIcon, label: "Gallery", badge: null },
   { href: "/admin/reviews", icon: Star, label: "Reviews", badge: null },
+  { href: "/admin/contacts", icon: MessageSquare, label: "Bookings", badge: null },
 ];
 
 const sidebarCategories = [
-  { label: "MAIN", links: [0, 1] },
+  { label: "MAIN", links: [0, 1, 5] },
   { label: "MANAGEMENT", links: [2, 3, 4] },
 ];
 

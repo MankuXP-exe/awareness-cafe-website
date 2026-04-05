@@ -13,7 +13,7 @@ export async function GET(request) {
   const limit = parseInt(searchParams.get("limit") || "100");
 
   const supabase = createAdminClient();
-  let query = supabase.from("orders").select("*").order("created_at", { ascending: false }).limit(limit);
+  let query = supabase.from("orders").select("*").neq("customer_address", "Table Booking").order("created_at", { ascending: false }).limit(limit);
 
   if (status && status !== "all") query = query.eq("status", status);
   if (search) {

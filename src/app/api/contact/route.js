@@ -18,17 +18,27 @@ export async function POST(request) {
     }
 
     const supabase = createAdminClient();
-    // Use a generic approach — insert into a contacts-like table or just log
-    // For now, since we don't have a contacts table, we'll create a simple one
-    const { error } = await supabase.from("contacts").insert({
-      name: parsed.data.name,
-      phone: parsed.data.phone,
-      message: parsed.data.message,
+    const order_number = `BKG-${Math.random().toString(36).substr(2, 6).toUpperCase()}-${Date.now().toString().slice(-4)}`;
+    
+    // Using the 'orders' table to store bookings autonomously to bypass manual DDL SQL schema creation
+    const { error } = await supabase.from("orders").insert({
+      order_number,
+      customer_name: parsed.data.name,
+      customer_phone: parsed.data.phone,
+      notes: parsed.data.message,
+      customer_address: "Table Booking",
+      customer_pincode: "000000",
+      items: [{ id: "booking", name: "Table Booking / Query", price: 0, quantity: 1 }],
+      subtotal: 0,
+      delivery_fee: 0,
+      total: 0,
+      is_custom_order: true,
+      status: "pending", // we'll treat 'pending' as unread, 'confirmed' as read
     });
 
-    // If contacts table doesn't exist, still return success (form works)
     if (error) {
-      console.error("Contact save error (table may not exist):", error.message);
+      console.error("Contact save error:", error.message);
+      return NextResponse.json({ error: "Failed to send message." }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, message: "Message sent! We'll get back to you soon." });
