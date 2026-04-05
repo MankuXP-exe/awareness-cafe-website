@@ -22,7 +22,39 @@ const menuJsonLd = {
   ],
 };
 
-export default function MenuPage() {
+import { createClient } from "@/lib/supabase/server";
+
+export const revalidate = 60;
+
+export default async function MenuPage() {
+  const supabase = await createClient();
+  
+  const { data: menuItems } = await supabase
+    .from("menu_items")
+    .select("*")
+    .eq("is_available", true)
+    .order("sort_order");
+
+  const formattedMenu = [];
+  if (menuItems) {
+    const categoriesMap = new Map();
+    menuItems.forEach((item) => {
+      if (!categoriesMap.has(item.category)) {
+        categoriesMap.set(item.category, {
+          category: item.category,
+          emoji: item.emoji || "🍽️",
+          items: [],
+        });
+      }
+      categoriesMap.get(item.category).items.push({
+        name: item.name,
+        desc: item.description,
+        price: item.price,
+        image: item.image_url || "/images/placeholder.webp",
+      });
+    });
+    formattedMenu.push(...categoriesMap.values());
+  }
   return (
     <>
       <script
@@ -31,7 +63,7 @@ export default function MenuPage() {
       />
       <Navbar />
       <main className="w-full overflow-x-hidden pt-16 md:pt-20">
-        <MenuContent />
+        <MenuContent menuData={formattedMenu} />
       </main>
       <Footer />
     </>

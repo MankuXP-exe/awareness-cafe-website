@@ -14,22 +14,10 @@ const filters = [
   { key: "team", label: "👥 Team" },
 ];
 
-export default function GalleryPage() {
+export default function GalleryPage({ allImages = [] }) {
   const [filter, setFilter] = useState("all");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [allImages, setAllImages] = useState(galleryImages);
 
-  // Try loading from Supabase, fallback to static
-  useEffect(() => {
-    fetch("/api/gallery")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.images?.length > 0) {
-          setAllImages([...data.images, ...galleryImages]);
-        }
-      })
-      .catch(() => {});
-  }, []);
 
   const filteredImages =
     filter === "all"
