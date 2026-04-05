@@ -12,7 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 export const revalidate = 60;
 
 export default async function Home() {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data: menuItems } = await supabase
     .from("menu_items")
