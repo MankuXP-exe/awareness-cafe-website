@@ -15,8 +15,11 @@ export async function POST(request) {
   const ext = file.name.split(".").pop();
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
+  // Convert File to ArrayBuffer
+  const fileBuffer = await file.arrayBuffer();
+
   // Upload to Supabase Storage 'menu-images' bucket
-  const { error: uploadError } = await supabase.storage.from("menu-images").upload(fileName, file, {
+  const { error: uploadError } = await supabase.storage.from("menu-images").upload(fileName, fileBuffer, {
     contentType: file.type, upsert: false,
   });
 

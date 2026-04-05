@@ -25,8 +25,11 @@ export async function POST(request) {
   const ext = file.name.split(".").pop();
   const fileName = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
+  // Convert File to ArrayBuffer, since Next.js formData File object can cause issues with Supabase Storage in Node.js
+  const fileBuffer = await file.arrayBuffer();
+
   // Upload to Supabase Storage
-  const { error: uploadError } = await supabase.storage.from("gallery").upload(fileName, file, {
+  const { error: uploadError } = await supabase.storage.from("gallery").upload(fileName, fileBuffer, {
     contentType: file.type, upsert: false,
   });
 

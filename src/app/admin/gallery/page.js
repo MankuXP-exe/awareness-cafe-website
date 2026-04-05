@@ -32,8 +32,11 @@ export default function AdminGallery() {
       fd.append("file", form.file); fd.append("title", form.title); fd.append("category", form.category);
       const res = await fetch("/api/admin/gallery", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: fd });
       if (res.ok) { toast.success("Uploaded!"); setShowUpload(false); setForm({ title: "", category: "food", file: null }); fetchImages(); }
-      else toast.error("Upload failed");
-    } catch { toast.error("Error"); } finally { setUploading(false); }
+      else {
+        const errData = await res.json().catch(() => ({}));
+        toast.error(errData.error || "Upload failed");
+      }
+    } catch { toast.error("Network Error"); } finally { setUploading(false); }
   };
 
   const handleDelete = async (id, url) => {

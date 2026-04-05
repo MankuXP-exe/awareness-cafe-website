@@ -48,7 +48,8 @@ export default function AdminMenu() {
           const uploadData = await uploadRes.json();
           finalImageUrl = uploadData.url;
         } else {
-          toast.error("Image upload failed");
+          const errData = await uploadRes.json().catch(() => ({}));
+          toast.error(errData.error || "Image upload failed");
           setUploading(false);
           return;
         }
