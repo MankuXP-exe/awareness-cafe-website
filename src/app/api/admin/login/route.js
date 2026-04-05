@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 import { createToken } from "@/lib/auth";
 
 export async function POST(request) {
@@ -16,20 +15,8 @@ export async function POST(request) {
       );
     }
 
-    // Check username
-    if (username !== adminUser) {
-      return NextResponse.json(
-        { error: "Invalid credentials." },
-        { status: 401 }
-      );
-    }
-
-    // For simplicity, compare plaintext from env (in production, store hashed)
-    // We hash the env password and compare
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
-    const isValid = await bcrypt.compare(password, hashedPassword);
-
-    if (!isValid) {
+    // Verify credentials against env vars
+    if (username !== adminUser || password !== adminPassword) {
       return NextResponse.json(
         { error: "Invalid credentials." },
         { status: 401 }

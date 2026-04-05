@@ -1,6 +1,4 @@
 export default function robots() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://theawarenesscafe.in";
-
   return {
     rules: [
       {
@@ -9,6 +7,6 @@ export default function robots() {
         disallow: ["/admin/", "/api/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: "https://theawarenesscafe.in/sitemap.xml",
   };
 }

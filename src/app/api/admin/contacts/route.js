@@ -1,24 +1,24 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
-import Contact from "@/models/Contact";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAuth } from "@/lib/auth";
 
+// GET — fetch all contact submissions
 export async function GET(request) {
-  const auth = requireAuth(request);
-  if (auth.error) {
-    return NextResponse.json({ error: auth.error }, { status: auth.status });
-  }
+  const user = requireAuth(request);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const conn = await connectDB();
-    if (!conn) {
-      return NextResponse.json({ error: "Database not configured" }, { status: 503 });
-    }
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("contacts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-    const contacts = await Contact.find().sort({ createdAt: -1 }).limit(100);
-    return NextResponse.json({ contacts });
-  } catch (error) {
-    console.error("Fetch contacts error:", error);
-    return NextResponse.json({ error: "Failed to fetch contacts" }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ contacts: [] });
+    }
+    return NextResponse.json({ contacts: data || [] });
+  } catch {
+    return NextResponse.json({ contacts: [] });
   }
 }

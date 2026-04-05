@@ -2,7 +2,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { ShoppingCart, Plus, Check } from "lucide-react";
 import { menuData } from "@/lib/data";
+import { useCartStore, parsePrice } from "@/stores/cartStore";
+import toast from "react-hot-toast";
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -107,11 +110,10 @@ export default function Menu() {
             Free Home Delivery within <span className="neon-text">5 km</span>
           </h3>
           <p className="text-gray-400 text-sm">
-            Call us at{" "}
+            Order online or call us at{" "}
             <a href="tel:+918750155505" className="text-[#C6FF00] hover:underline">
               +91 87501 55505
-            </a>{" "}
-            to place your order
+            </a>
           </p>
         </motion.div>
       </div>
@@ -121,6 +123,46 @@ export default function Menu() {
 
 function MenuCard({ item, index, categoryEmoji }) {
   const [imgError, setImgError] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.openCart);
+
+  // Check if item has multiple price variants (e.g., "₹59 / ₹119 / ₹199")
+  const priceStr = item.price;
+  const hasVariants = priceStr.includes("/") && !priceStr.startsWith("+");
+  const isAddon = priceStr.startsWith("+");
+
+  const handleAddToCart = (variant) => {
+    const numericPrice = variant
+      ? parseInt(variant.match(/\d+/)?.[0] || "0", 10)
+      : parsePrice(priceStr);
+
+    if (numericPrice === 0) return;
+
+    addItem({
+      name: item.name,
+      variant: variant || null,
+      numericPrice,
+      image: item.image,
+    });
+
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+
+    toast.success(`${item.name} added to cart!`, {
+      icon: "🛒",
+      style: { fontFamily: "var(--font-heading)" },
+    });
+  };
+
+  // Parse variants for multi-price items (Small/Medium/Large for pizza etc.)
+  const variants = hasVariants
+    ? priceStr.split("/").map((p, i) => {
+        const price = p.trim();
+        const sizes = ["Small", "Medium", "Large"];
+        return { label: sizes[i] || `Option ${i + 1}`, price };
+      })
+    : null;
 
   return (
     <motion.div
@@ -158,7 +200,53 @@ function MenuCard({ item, index, categoryEmoji }) {
         <h4 className="text-white font-bold text-sm sm:text-base mb-1" style={{ fontFamily: "var(--font-heading)" }}>
           {item.name}
         </h4>
-        <p className="text-gray-400 text-xs leading-relaxed">{item.desc}</p>
+        <p className="text-gray-400 text-xs leading-relaxed mb-3">{item.desc}</p>
+
+        {/* Add to Cart */}
+        {isAddon ? (
+          <p className="text-[#C6FF00]/60 text-xs italic">Add-on — select with any pizza</p>
+        ) : variants ? (
+          /* Multi-variant selector (pizza sizes, sandwich sizes) */
+          <div className="flex flex-wrap gap-1.5">
+            {variants.map((v) => (
+              <button
+                key={v.label}
+                onClick={() => handleAddToCart(`${v.label} — ${v.price}`)}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] 
+                  text-xs text-gray-300 hover:border-[#C6FF00]/50 hover:text-[#C6FF00] transition-all
+                  active:scale-95 min-h-[36px]"
+              >
+                <Plus className="w-3 h-3" />
+                <span>{v.label}</span>
+                <span className="text-[#C6FF00] font-bold">{v.price.includes("₹") ? v.price.trim() : `₹${v.price.trim()}`}</span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          /* Single-price add to cart */
+          <button
+            onClick={() => handleAddToCart()}
+            className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold 
+              transition-all duration-300 active:scale-95 min-h-[44px] ${
+              justAdded
+                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                : "bg-[#C6FF00]/10 text-[#C6FF00] border border-[#C6FF00]/20 hover:bg-[#C6FF00] hover:text-black"
+            }`}
+            style={{ fontFamily: "var(--font-heading)" }}
+          >
+            {justAdded ? (
+              <>
+                <Check className="w-4 h-4" />
+                Added!
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                Add to Cart
+              </>
+            )}
+          </button>
+        )}
       </div>
     </motion.div>
   );
