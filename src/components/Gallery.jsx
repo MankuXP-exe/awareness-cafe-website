@@ -2,9 +2,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { galleryImages } from "@/lib/data";
 
-export default function Gallery() {
+export default function Gallery({ galleryImages = [] }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [filter, setFilter] = useState("all");
 

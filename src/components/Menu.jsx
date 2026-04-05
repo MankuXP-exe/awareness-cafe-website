@@ -3,11 +3,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ShoppingCart, Plus, Check } from "lucide-react";
-import { menuData } from "@/lib/data";
 import { useCartStore, parsePrice } from "@/stores/cartStore";
 import toast from "react-hot-toast";
 
-export default function Menu() {
+export default function Menu({ menuData = [] }) {
   const [activeCategory, setActiveCategory] = useState("All");
   const categories = ["All", ...menuData.map((c) => c.category)];
 
