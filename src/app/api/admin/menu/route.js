@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAuth } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 // GET — fetch all menu items from Supabase
 export async function GET(request) {
   const supabase = createAdminClient();

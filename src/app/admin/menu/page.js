@@ -19,14 +19,9 @@ export default function AdminMenu() {
     try {
       const res = await fetch("/api/admin/menu", { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
-      if (data.items?.length > 0) { setItems(data.items); }
-      else {
-        const flat = menuData.flatMap(c => c.items.map(i => ({ ...i, category: c.category, is_available: true, id: i.name })));
-        setItems(flat);
-      }
+      setItems(data.items || []);
     } catch {
-      const flat = menuData.flatMap(c => c.items.map(i => ({ ...i, category: c.category, is_available: true, id: i.name })));
-      setItems(flat);
+      setItems([]);
     } finally { setLoading(false); }
   }, [token]);
 
@@ -105,13 +100,20 @@ export default function AdminMenu() {
                 <div>
                   <label className="text-white text-xs font-medium mb-1.5 block">Price *</label>
                   <input type="text" required value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50" placeholder="₹49" />
+                    className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50" placeholder="e.g. ₹50 OR Half: ₹50 / Full: ₹90" />
+                  <p className="text-[#8f93ac] text-[10px] mt-1">For multi-sizes, use "Name: Price" separated by "/"</p>
                 </div>
               </div>
               <div>
                 <label className="text-white text-xs font-medium mb-1.5 block">Description</label>
                 <textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows={2}
-                  className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50 resize-none" />
+                  className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50 resize-none" placeholder="Optional brief description of the food item..." />
+              </div>
+              <div>
+                <label className="text-white text-xs font-medium mb-1.5 block">Image URL</label>
+                <input type="text" value={form.image_url} onChange={e => setForm(p => ({ ...p, image_url: e.target.value }))}
+                  className="w-full px-3 py-2.5 rounded-lg bg-[#1a1d35] border border-[#2a2d4a] text-white text-sm placeholder-[#8f93ac] focus:outline-none focus:border-[#845adf]/50" placeholder="https://... or /menu/item.png" />
+                <p className="text-[#8f93ac] text-[10px] mt-1">Provide a valid image link. If empty, a placeholder will be used.</p>
               </div>
               <div className="flex items-center gap-3">
                 <input type="checkbox" id="avail" checked={form.is_available} onChange={e => setForm(p => ({ ...p, is_available: e.target.checked }))} className="accent-[#845adf]" />

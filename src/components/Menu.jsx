@@ -154,10 +154,14 @@ function MenuCard({ item, index, categoryEmoji }) {
     });
   };
 
-  // Parse variants for multi-price items (Small/Medium/Large for pizza etc.)
+  // Parse variants for multi-price items (e.g. "Half: ₹50 / Full: ₹90")
   const variants = hasVariants
     ? priceStr.split("/").map((p, i) => {
         const price = p.trim();
+        if (price.includes(":")) {
+          const [label, val] = price.split(":");
+          return { label: label.trim(), price: val.trim() };
+        }
         const sizes = ["Small", "Medium", "Large"];
         return { label: sizes[i] || `Option ${i + 1}`, price };
       })
