@@ -37,10 +37,15 @@ export async function GET(request) {
     const sorted = Object.entries(itemCounts).sort((a, b) => b[1] - a[1]);
     const mostOrderedItem = sorted.length > 0 ? { name: sorted[0][0], count: sorted[0][1] } : null;
 
+    // Bookings stats
+    const { count: totalBookings } = await supabase.from("contacts").select("*", { count: "exact", head: true });
+    const { count: unreadBookings } = await supabase.from("contacts").select("*", { count: "exact", head: true }).eq("read", false);
+
     return NextResponse.json({
       totalOrders: totalOrders || 0, deliveredOrders: deliveredOrders || 0,
       cancelledOrders: cancelledOrders || 0, totalRevenue: Math.round(totalRevenue),
       todayOrders, todayRevenue: Math.round(todayRevenue), mostOrderedItem,
+      totalBookings: totalBookings || 0, unreadBookings: unreadBookings || 0,
     });
   } catch (err) {
     console.error("Stats error:", err);

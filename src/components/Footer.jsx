@@ -88,7 +88,7 @@ export default function Footer() {
             <h3 className="text-white font-bold text-lg mb-4" style={{ fontFamily: "var(--font-heading)" }}>Find Us</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-3"><span className="text-[#C6FF00] mt-0.5 text-lg">📍</span><span className="text-gray-400 text-sm leading-relaxed">Gadi Budhera Road, Near Vaishno Devi Mandir, Haryana 122505, India</span></li>
-              <li><a href="tel:+918750155505" className="flex items-center gap-3 text-gray-400 hover:text-[#C6FF00] transition-colors"><span className="text-lg">📞</span><span className="text-sm">+91 87501 55505</span></a></li>
+              <li><a href="tel:+917838485551" className="flex items-center gap-3 text-gray-400 hover:text-[#C6FF00] transition-colors"><span className="text-lg">📞</span><span className="text-sm">+91 78384 85551</span></a></li>
               <li><a href="mailto:info@theawarenesscafe.in" className="flex items-center gap-3 text-gray-400 hover:text-[#C6FF00] transition-colors"><span className="text-lg">✉️</span><span className="text-sm">info@theawarenesscafe.in</span></a></li>
             </ul>
           </motion.div>

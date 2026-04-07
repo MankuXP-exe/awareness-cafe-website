@@ -34,7 +34,7 @@ export default function MapSection() {
             className="lg:col-span-2 rounded-2xl overflow-hidden border border-[#2a2a2a] h-[300px] sm:h-[400px] lg:h-[450px]"
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3507.123456789!2d76.89!3d28.42!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sThe%20Awareness%20Cafe!5e0!3m2!1sen!2sin!4v1234567890"
+              src="https://maps.google.com/maps?width=100%25&height=100%25&hl=en&q=The%20Awareness%20Cafe,%20Gadi%20Budhera%20Road,%20Near%20Vaishno%20Devi%20Mandir,%20Haryana+(The%20Awareness%20Cafe)&t=&z=15&ie=UTF8&iwloc=B&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9)" }}
@@ -76,8 +76,8 @@ export default function MapSection() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>Phone</h4>
-                  <a href="tel:+918750155505" className="text-[#C6FF00] hover:underline text-sm">
-                    +91 87501 55505
+                  <a href="tel:+917838485551" className="text-[#C6FF00] hover:underline text-sm">
+                    +91 78384 85551
                   </a>
                   <br />
                   <a href="tel:+917838485551" className="text-[#C6FF00] hover:underline text-sm">
@@ -112,7 +112,7 @@ export default function MapSection() {
                 <MapPin className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
                 <span className="uppercase tracking-wider text-sm font-bold">GET DIRECTIONS</span>
               </a>
-              <a href="tel:+918750155505" className="neon-btn-outline text-center w-full">
+              <a href="tel:+917838485551" className="neon-btn-outline text-center w-full">
                 📞 Call Now
               </a>
             </div>

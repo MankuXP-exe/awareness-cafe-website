@@ -71,7 +71,7 @@ INSERT INTO admin_settings (key, value) VALUES
   ('delivery_fee', '0'),
   ('delivery_radius_km', '5'),
   ('estimated_delivery_time', '30-45 minutes'),
-  ('cafe_phone', '+918750155505'),
+  ('cafe_phone', '+917838485551'),
   ('cafe_address', 'Gadi Budhera Road, Near Vaishno Devi Mandir, Haryana 122505')
 ON CONFLICT (key) DO NOTHING;
 

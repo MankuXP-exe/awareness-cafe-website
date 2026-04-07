@@ -190,8 +190,8 @@ export default function Contact() {
               {
                 icon: "📞",
                 title: "Call Us",
-                content: "+91 87501 55505",
-                link: "tel:+918750155505",
+                content: "+91 78384 85551",
+                link: "tel:+917838485551",
               },
               {
                 icon: "✉️",
@@ -228,14 +228,14 @@ export default function Contact() {
             <div className="glass-card p-6">
               <h4 className="text-white font-bold mb-4" style={{ fontFamily: "var(--font-heading)" }}>Quick Actions</h4>
               <div className="grid grid-cols-2 gap-3">
-                <a href="tel:+918750155505" className="neon-btn-outline text-center !text-xs !py-3">
+                <a href="tel:+917838485551" className="neon-btn-outline text-center !text-xs !py-3">
                   📞 Call Now
                 </a>
                 <a href="https://maps.google.com/?q=The+Awareness+Cafe+Budhera+Haryana" target="_blank" rel="noopener noreferrer"
                   className="neon-btn-outline text-center !text-xs !py-3">
                   📍 Directions
                 </a>
-                <a href="https://wa.me/918750155505" target="_blank" rel="noopener noreferrer"
+                <a href="https://wa.me/917838485551" target="_blank" rel="noopener noreferrer"
                   className="neon-btn text-center !text-xs !py-3 col-span-2">
                   💬 WhatsApp Us
                 </a>

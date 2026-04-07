@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Package, CheckCircle, XCircle, DollarSign, TrendingUp, Clock, RefreshCw, ArrowUpRight, ArrowDownRight, Flame, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { Package, CheckCircle, XCircle, DollarSign, TrendingUp, Clock, RefreshCw, ArrowUpRight, ArrowDownRight, Flame, ShoppingBag, MessageSquare, ChevronRight } from "lucide-react";
 
 // Simple SVG donut chart
 function DonutChart({ data, total }) {
@@ -40,6 +41,7 @@ function DonutChart({ data, total }) {
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [recentOrders, setRecentOrders] = useState([]);
+  const [recentBookings, setRecentBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = typeof window !== "undefined" ? localStorage.getItem("admin_token") : "";
 
@@ -47,14 +49,19 @@ export default function AdminDashboard() {
     if (!token) return;
     setLoading(true);
     try {
-      const [statsRes, ordersRes] = await Promise.all([
+      const [statsRes, ordersRes, bookingsRes] = await Promise.all([
         fetch("/api/admin/stats", { headers: { Authorization: `Bearer ${token}` } }),
         fetch("/api/admin/orders?limit=10", { headers: { Authorization: `Bearer ${token}` } }),
+        fetch("/api/admin/contacts", { headers: { Authorization: `Bearer ${token}` } }),
       ]);
       if (statsRes.ok) setStats(await statsRes.json());
       if (ordersRes.ok) {
         const data = await ordersRes.json();
         setRecentOrders(data.orders || []);
+      }
+      if (bookingsRes.ok) {
+        const data = await bookingsRes.json();
+        setRecentBookings((data.messages || []).slice(0, 5));
       }
     } catch (err) { console.error(err); }
     finally { setLoading(false); }
@@ -91,6 +98,8 @@ export default function AdminDashboard() {
       gradient: "from-[#26bf94] to-[#1ea07a]", iconBg: "bg-white/20" },
     { icon: TrendingUp, label: "Today's Revenue", value: `₹${(stats.todayRevenue || 0).toLocaleString("en-IN")}`, change: `${stats.todayOrders || 0} orders`, up: true,
       gradient: "from-[#f5b849] to-[#e09a2d]", iconBg: "bg-white/20" },
+    { icon: MessageSquare, label: "Unread Bookings", value: stats.unreadBookings || 0, change: `Total: ${stats.totalBookings}`, up: stats.unreadBookings > 0,
+      gradient: "from-[#845adf] to-[#3b82f6]", iconBg: "bg-white/20" },
   ] : [];
 
   const donutData = stats ? [
@@ -115,13 +124,13 @@ export default function AdminDashboard() {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-          {[...Array(4)].map((_, i) => <div key={i} className="h-[120px] shimmer rounded-xl" />)}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+          {[...Array(5)].map((_, i) => <div key={i} className="h-[120px] shimmer rounded-xl" />)}
         </div>
       ) : (
         <>
           {/* Stat Cards — Colorful gradient like Ynex */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
             {statCards.map((card, i) => {
               const Icon = card.icon;
               return (
@@ -215,32 +224,38 @@ export default function AdminDashboard() {
               )}
             </motion.div>
 
-            {/* Quick Stats */}
+            {/* Recent Bookings Box */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="lg:col-span-4 bg-[#101325] border border-[#1e2139] rounded-xl p-5">
-              <div className="flex items-center justify-between mb-5">
-                <h3 className="text-white font-semibold text-sm">Quick Overview</h3>
+              className="lg:col-span-4 bg-[#101325] border border-[#1e2139] rounded-xl overflow-hidden flex flex-col">
+              <div className="p-5 flex items-center justify-between border-b border-[#1e2139]">
+                <h3 className="text-white font-semibold text-sm">Recent Bookings</h3>
+                <Link href="/admin/contacts" className="text-[#845adf] text-xs font-medium hover:underline flex items-center gap-1">
+                  View All <ChevronRight className="w-3 h-3" />
+                </Link>
               </div>
-              <div className="space-y-4">
-                {[
-                  { label: "Today's Orders", value: stats?.todayOrders || 0, icon: Clock, color: "text-[#23b7e5]", bg: "bg-[#23b7e5]/10" },
-                  { label: "Pending Orders", value: (stats?.totalOrders || 0) - (stats?.deliveredOrders || 0) - (stats?.cancelledOrders || 0), icon: Package, color: "text-[#f5b849]", bg: "bg-[#f5b849]/10" },
-                  { label: "Cancelled", value: stats?.cancelledOrders || 0, icon: XCircle, color: "text-[#e6533c]", bg: "bg-[#e6533c]/10" },
-                  { label: "Completion Rate", value: `${stats?.totalOrders ? Math.round((stats.deliveredOrders / stats.totalOrders) * 100) : 0}%`, icon: CheckCircle, color: "text-[#26bf94]", bg: "bg-[#26bf94]/10" },
-                ].map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.label} className="flex items-center gap-3 p-3 bg-[#1a1d35]/50 rounded-lg">
-                      <div className={`w-9 h-9 rounded-lg ${item.bg} flex items-center justify-center`}>
-                        <Icon className={`w-4 h-4 ${item.color}`} />
+              <div className="flex-1 overflow-y-auto max-h-[300px]">
+                {recentBookings.length === 0 ? (
+                  <div className="p-10 text-center flex flex-col items-center justify-center">
+                    <MessageSquare className="w-8 h-8 text-[#8f93ac] opacity-20 mb-2" />
+                    <p className="text-[#8f93ac] text-xs">No active bookings</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-[#1e2139]">
+                    {recentBookings.map((msg) => (
+                      <div key={msg.id} className="p-4 hover:bg-[#1a1d35]/30 transition-colors">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-white text-xs font-bold truncate">{msg.name}</p>
+                          {!msg.read && <span className="w-1.5 h-1.5 rounded-full bg-[#845adf] animate-pulse" />}
+                        </div>
+                        <p className="text-[#8f93ac] text-[10px] mb-2">{msg.phone}</p>
+                        <p className="text-[#e2e8f0] text-[11px] line-clamp-1 italic">&quot;{msg.message}&quot;</p>
+                        <p className="text-[9px] text-gray-600 mt-2">
+                          {new Date(msg.created_at).toLocaleString("en-IN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short" })}
+                        </p>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-[#8f93ac] text-xs">{item.label}</p>
-                        <p className={`text-white text-sm font-bold`}>{item.value}</p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           </div>

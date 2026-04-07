@@ -77,7 +77,7 @@ const jsonLd = {
   name: "The Awareness Cafe",
   image: "/images/cafe front view.webp",
   url: "https://theawarenesscafe.in",
-  telephone: "+918750155505",
+  telephone: "+917838485551",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Gadi Budhera Road, Near Vaishno Devi Mandir",

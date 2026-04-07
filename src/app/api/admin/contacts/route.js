@@ -9,26 +9,25 @@ export async function GET(request) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const supabase = createAdminClient();
-  // Fetch ONLY items marked as Table Booking
+  // Fetch from dedicated contacts table
   const { data, error } = await supabase
-    .from("orders")
+    .from("contacts")
     .select("*")
-    .eq("customer_address", "Table Booking")
     .order("created_at", { ascending: false });
 
   if (error) return NextResponse.json({ error: "Failed to fetch messages" }, { status: 500 });
   return NextResponse.json({ messages: data || [] });
 }
 
-// PATCH — update status (e.g., mark as read/resolved)
+// PATCH — update read status
 export async function PATCH(request) {
   const user = requireAuth(request);
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { id, status } = await request.json(); // "pending" = New, "confirmed" = Read
+  const { id, read } = await request.json(); 
   
   const supabase = createAdminClient();
-  const { error } = await supabase.from("orders").update({ status }).eq("id", id);
+  const { error } = await supabase.from("contacts").update({ read }).eq("id", id);
   if (error) return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   return NextResponse.json({ success: true });
 }
@@ -41,7 +40,7 @@ export async function DELETE(request) {
   const { id } = await request.json();
   const supabase = createAdminClient();
   
-  const { error } = await supabase.from("orders").delete().eq("id", id);
+  const { error } = await supabase.from("contacts").delete().eq("id", id);
   if (error) return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   return NextResponse.json({ success: true });
 }

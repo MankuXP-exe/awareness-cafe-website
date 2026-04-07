@@ -28,6 +28,7 @@ export default function Chatbot() {
     const userMsg = { role: "user", content: text };
     setMessages((p) => [...p, userMsg]);
     setInput("");
+    if (inputRef.current) inputRef.current.style.height = 'auto';
     setIsLoading(true);
     try {
       const res = await fetch("/api/chat", {
@@ -67,7 +68,7 @@ export default function Chatbot() {
       }
       setMessages((p) => [...p, { role: "assistant", content: reply.replace(/```json[\s\S]*?```/g, "").trim() || reply }]);
     } catch {
-      setMessages((p) => [...p, { role: "assistant", content: "Oops! Something went wrong 😅 Please try again or call +91 87501 55505!" }]);
+      setMessages((p) => [...p, { role: "assistant", content: "Oops! Something went wrong 😅 Please try again or call +91 78384 85551!" }]);
       toast.error("Chat error.");
     } finally { setIsLoading(false); }
   };
@@ -117,9 +118,13 @@ export default function Chatbot() {
             </div>
             {/* Input */}
             <div className="p-4 border-t border-[#2a2a2a] bg-[#111]">
-              <div className="flex gap-2">
-                <input ref={inputRef} type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }} placeholder="Type your order..." className="flex-1 px-4 py-3 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#C6FF00]/50 transition-all" disabled={isLoading} />
-                <button onClick={handleSend} disabled={isLoading || !input.trim()} className="w-12 h-12 rounded-xl bg-[#C6FF00] text-black flex items-center justify-center hover:bg-[#d4ff33] disabled:opacity-40 disabled:cursor-not-allowed transition-all" aria-label="Send"><Send className="w-4 h-4" /></button>
+              <div className="flex gap-2 items-end">
+                <textarea ref={inputRef} value={input} onChange={(e) => {
+                  setInput(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+                }} placeholder="Type your order..." className="flex-1 px-4 py-3 rounded-xl bg-[#1a1a1a] border border-[#2a2a2a] text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#C6FF00]/50 transition-all resize-none min-h-[48px]" disabled={isLoading} rows="1" style={{ overflowY: 'auto' }} />
+                <button onClick={handleSend} disabled={isLoading || !input.trim()} className="w-12 h-12 flex-shrink-0 rounded-xl bg-[#C6FF00] text-black flex items-center justify-center hover:bg-[#d4ff33] disabled:opacity-40 disabled:cursor-not-allowed transition-all" aria-label="Send"><Send className="w-4 h-4" /></button>
               </div>
               <p className="text-gray-600 text-[10px] text-center mt-2">Powered by AI • The Awareness Cafe</p>
             </div>

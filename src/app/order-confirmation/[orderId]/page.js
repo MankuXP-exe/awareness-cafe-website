@@ -13,7 +13,7 @@ export default async function OrderConfirmationPage({ params }) {
   const waMsg = encodeURIComponent(
     `🎉 New Order Received!\n\nOrder ID: ${orderId}\n\nPlease check your admin dashboard for full details.\n\n— The Awareness Cafe`
   );
-  const waLink = `https://wa.me/918750155505?text=${waMsg}`;
+  const waLink = `https://wa.me/917838485551?text=${waMsg}`;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 py-20">
@@ -55,7 +55,7 @@ export default async function OrderConfirmationPage({ params }) {
             <span className="text-2xl">📞</span>
             <div>
               <p className="text-white font-medium text-sm">Need help?</p>
-              <a href="tel:+918750155505" className="text-[#C6FF00] text-sm hover:underline">+91 87501 55505</a>
+              <a href="tel:+917838485551" className="text-[#C6FF00] text-sm hover:underline">+91 78384 85551</a>
             </div>
           </div>
         </div>

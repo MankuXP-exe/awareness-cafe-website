@@ -18,22 +18,12 @@ export async function POST(request) {
     }
 
     const supabase = createAdminClient();
-    const order_number = `BKG-${Math.random().toString(36).substr(2, 6).toUpperCase()}-${Date.now().toString().slice(-4)}`;
     
-    // Using the 'orders' table to store bookings autonomously to bypass manual DDL SQL schema creation
-    const { error } = await supabase.from("orders").insert({
-      order_number,
-      customer_name: parsed.data.name,
-      customer_phone: parsed.data.phone,
-      notes: parsed.data.message,
-      customer_address: "Table Booking",
-      customer_pincode: "000000",
-      items: [{ id: "booking", name: "Table Booking / Query", price: 0, quantity: 1 }],
-      subtotal: 0,
-      delivery_fee: 0,
-      total: 0,
-      is_custom_order: true,
-      status: "pending", // we'll treat 'pending' as unread, 'confirmed' as read
+    // Using the dedicated 'contacts' table as requested
+    const { error } = await supabase.from("contacts").insert({
+      name: parsed.data.name,
+      phone: parsed.data.phone,
+      message: parsed.data.message,
     });
 
     if (error) {

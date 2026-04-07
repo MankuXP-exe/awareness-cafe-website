@@ -23,15 +23,15 @@ export default function AdminContacts() {
 
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
 
-  const updateStatus = async (id, status) => {
+  const toggleReadStatus = async (id, currentRead) => {
     try {
       const res = await fetch("/api/admin/contacts", {
         method: "PATCH",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ id, status }),
+        body: JSON.stringify({ id, read: !currentRead }),
       });
       if (res.ok) {
-        toast.success("Status updated");
+        toast.success(currentRead ? "Marked as unread" : "Marked as resolved");
         fetchMessages();
       } else {
         toast.error("Update failed");
@@ -80,7 +80,7 @@ export default function AdminContacts() {
       ) : (
         <div className="space-y-4">
           {messages.map((msg) => {
-            const isRead = msg.status === "confirmed";
+            const isRead = msg.read;
             return (
               <div key={msg.id} className={`bg-[#101325] border ${isRead ? 'border-[#1e2139]/50 opacity-80' : 'border-[#845adf]/50'} rounded-xl p-5 relative transition-all`}>
                 {!isRead && (
@@ -95,11 +95,11 @@ export default function AdminContacts() {
                 
                 <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
                   <div>
-                    <h3 className="text-white font-bold text-lg mb-1">{msg.customer_name}</h3>
-                    <p className="text-sm font-medium text-[#C6FF00] mb-3">{msg.customer_phone}</p>
+                    <h3 className="text-white font-bold text-lg mb-1">{msg.name}</h3>
+                    <p className="text-sm font-medium text-[#C6FF00] mb-3">{msg.phone}</p>
                     
                     <div className="bg-[#1a1d35] p-3 rounded-lg border border-[#2a2d4a]">
-                      <p className="text-[#e2e8f0] text-sm whitespace-pre-wrap">{msg.notes}</p>
+                      <p className="text-[#e2e8f0] text-sm whitespace-pre-wrap">{msg.message}</p>
                     </div>
                     <p className="text-[10px] text-[#8f93ac] mt-3">
                       Received: {new Date(msg.created_at).toLocaleString()}
@@ -107,21 +107,15 @@ export default function AdminContacts() {
                   </div>
                   
                   <div className="flex items-center gap-2 mt-4 md:mt-0 w-full md:w-auto shrink-0 border-t border-[#1e2139] md:border-0 pt-4 md:pt-0">
-                    {!isRead ? (
-                      <button 
-                        onClick={() => updateStatus(msg.id, "confirmed")}
-                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-[#1a1d35] hover:bg-[#26bf94]/10 text-[#26bf94] border border-[#2a2d4a] hover:border-[#26bf94]/30 rounded-lg text-xs font-medium transition-colors"
-                      >
-                        <CheckCircle className="w-3.5 h-3.5" /> Mark Resolved
-                      </button>
-                    ) : (
-                      <button 
-                        onClick={() => updateStatus(msg.id, "pending")}
-                        className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-[#1a1d35] hover:bg-[#8f93ac] text-[#8f93ac] hover:text-white border border-[#2a2d4a] rounded-lg text-xs font-medium transition-colors"
-                      >
-                        Mark Unread
-                      </button>
-                    )}
+                    <button 
+                      onClick={() => toggleReadStatus(msg.id, isRead)}
+                      className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-medium transition-colors border
+                        ${isRead 
+                          ? 'bg-[#1a1d35] text-[#8f93ac] border-[#2a2d4a] hover:bg-[#8f93ac] hover:text-white' 
+                          : 'bg-[#1a1d35] text-[#26bf94] border-[#2a2d4a] hover:bg-[#26bf94]/10 hover:border-[#26bf94]/30'}`}
+                    >
+                      <CheckCircle className="w-3.5 h-3.5" /> {isRead ? "Mark Unread" : "Mark Resolved"}
+                    </button>
                     
                     <button 
                       onClick={() => handleDelete(msg.id)}

@@ -18,8 +18,8 @@ export default function MobileNav() {
     { href: "/gallery", label: "📸 Gallery" },
     { href: "/reviews", label: "⭐ Reviews" },
     { href: "/checkout", label: "🛒 Checkout" },
-    { href: "tel:+918750155505", label: "📞 Call Us" },
-    { href: "https://wa.me/918750155505", label: "💬 WhatsApp", external: true },
+    { href: "tel:+917838485551", label: "📞 Call Us" },
+    { href: "https://wa.me/917838485551", label: "💬 WhatsApp", external: true },
   ];
 
   return (

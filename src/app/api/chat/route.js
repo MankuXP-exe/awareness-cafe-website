@@ -120,7 +120,7 @@ export async function POST(request) {
   } catch (err) {
     console.error("Chat API error:", err);
     return NextResponse.json({
-      message: "Oops! Something went wrong 😅 Please try again or call +91 87501 55505!",
+      message: "Oops! Something went wrong 😅 Please try again or call +91 78384 85551!",
     });
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 const values = [
@@ -10,7 +11,8 @@ const values = [
 ];
 
 const milestones = [
-  { year: "2022", title: "Founded", desc: "The Awareness Cafe opens near Vaishno Devi Mandir." },
+  { year: "2020", title: "Founded", desc: "The concept of The Awareness Cafe was established." },
+  { year: "2022", title: "Started", desc: "The Awareness Cafe officially opens near Vaishno Devi Mandir." },
   { year: "2023", title: "100+ Customers", desc: "Reached 100 loyal regulars. Google rating hits 4.6⭐." },
   { year: "2024", title: "Menu Expansion", desc: "Expanded to 40+ items — pizzas, burgers, shakes." },
   { year: "2025", title: "Community Favorite", desc: "Became the go-to café for food lovers." },
@@ -18,6 +20,25 @@ const milestones = [
 ];
 
 export default function AboutContent() {
+  const [team, setTeam] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/team", { cache: "no-store" })
+      .then(res => res.json())
+      .then(data => {
+        if (data.team && data.team.length > 0) {
+          setTeam(data.team);
+        } else {
+          setTeam([
+            { id: 1, emoji: "👨‍🍳", title: "Owner & Founder", sub: "Visionary", desc: "Passionate about quality food and welcoming atmosphere." },
+            { id: 2, emoji: "👨‍🍳", title: "Our Chefs", sub: "Kitchen Masters", desc: "Crafting every dish with precision and passion." },
+            { id: 3, img: "/images/staff.webp", title: "Our Staff", sub: "Heart of Service", desc: "Always smiling — your comfort is our priority." },
+          ]);
+        }
+      })
+      .catch(() => setTeam([]));
+  }, []);
+
   return (
     <>
       {/* Hero */}
@@ -50,7 +71,7 @@ export default function AboutContent() {
             <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "var(--font-heading)" }}>From a <span className="text-[#C6FF00]">Dream</span> to Your Favorite Café</h2>
             <div className="space-y-4 text-gray-400 leading-relaxed">
               <p>Nestled on Gadi Budhera Road, near Vaishno Devi Mandir in Haryana, The Awareness Cafe was born from a powerful idea — creating a space where people connect over delicious food.</p>
-              <p>Founded in 2022, what started as a small café serving breakfast and chai has evolved into a destination offering handcrafted pizzas, gourmet burgers, premium shakes, and artisanal coffees.</p>
+              <p>Founded in 2020 and officially started in 2022, what began as a small café serving breakfast and chai has evolved into a destination offering handcrafted pizzas, gourmet burgers, premium shakes, and artisanal coffees.</p>
               <p>Our name reflects our philosophy — <span className="text-[#C6FF00] font-medium">awareness in every bite</span>. Food should be prepared mindfully, served with love, and enjoyed fully.</p>
             </div>
           </motion.div>
@@ -122,19 +143,22 @@ export default function AboutContent() {
           <div className="neon-line" />
         </div>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-          {[
-            { emoji: "👨‍🍳", title: "Owner & Founder", sub: "Visionary", desc: "Passionate about quality food and welcoming atmosphere." },
-            { emoji: "👨‍🍳", title: "Our Chefs", sub: "Kitchen Masters", desc: "Crafting every dish with precision and passion." },
-            { img: "/images/staff.webp", title: "Our Staff", sub: "Heart of Service", desc: "Always smiling — your comfort is our priority." },
-          ].map((t, i) => (
-            <motion.div key={t.title} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="glass-card p-8 text-center">
-              {t.img ? <div className="relative w-24 h-24 rounded-full overflow-hidden mx-auto mb-4"><Image src={t.img} alt={t.title} fill className="object-cover" sizes="96px" /></div>
-                : <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#C6FF00]/20 to-[#C6FF00]/5 flex items-center justify-center mx-auto mb-4 text-5xl">{t.emoji}</div>}
-              <h3 className="text-white font-bold text-lg" style={{ fontFamily: "var(--font-heading)" }}>{t.title}</h3>
-              <p className="text-[#C6FF00] text-sm mb-3">{t.sub}</p>
-              <p className="text-gray-400 text-sm">{t.desc}</p>
-            </motion.div>
-          ))}
+          {!team ? (
+            <div className="col-span-3 flex justify-center text-[#8f93ac]">Loading team...</div>
+          ) : (
+            team.map((t, i) => (
+              <motion.div key={t.id || t.title || t.name} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="glass-card p-8 text-center">
+                {t.image_url || t.img ? (
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-[#1e2139]"><Image src={t.image_url || t.img} alt={t.name || t.title} fill className="object-cover" sizes="96px" /></div>
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#C6FF00]/20 to-[#C6FF00]/5 flex items-center justify-center mx-auto mb-4 text-5xl">{t.emoji || "👨‍🍳"}</div>
+                )}
+                <h3 className="text-white font-bold text-lg" style={{ fontFamily: "var(--font-heading)" }}>{t.name || t.title}</h3>
+                <p className="text-[#C6FF00] text-sm mb-3">{t.role || t.sub}</p>
+                <p className="text-gray-400 text-sm">{t.desc}</p>
+              </motion.div>
+            ))
+          )}
         </div>
       </section>
 
@@ -146,7 +170,7 @@ export default function AboutContent() {
           <p className="text-gray-400 text-lg mb-8">Grab your friends and let us make your day brighter.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/menu" className="neon-btn text-center py-4 px-8">🛒 Order Online</a>
-            <a href="tel:+918750155505" className="neon-btn-outline text-center py-4 px-8">📞 Call Now</a>
+            <a href="tel:+917838485551" className="neon-btn-outline text-center py-4 px-8">📞 Call Now</a>
           </div>
         </div>
       </section>
