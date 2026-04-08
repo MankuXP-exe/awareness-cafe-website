@@ -110,8 +110,8 @@ export default function Menu({ menuData = [] }) {
           </h3>
           <p className="text-gray-400 text-sm">
             Order online or call us at{" "}
-            <a href="tel:+917838485551" className="text-[#C6FF00] hover:underline">
-              +91 78384 85551
+            <a href="tel:+918750155505" className="text-[#C6FF00] hover:underline">
+              +91 87501 55505
             </a>
           </p>
         </motion.div>

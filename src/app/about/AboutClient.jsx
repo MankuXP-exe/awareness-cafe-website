@@ -70,7 +70,7 @@ export default function AboutContent() {
           <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <h2 className="text-3xl font-bold mb-6" style={{ fontFamily: "var(--font-heading)" }}>From a <span className="text-[#C6FF00]">Dream</span> to Your Favorite Café</h2>
             <div className="space-y-4 text-gray-400 leading-relaxed">
-              <p>Nestled on Gadi Budhera Road, near Vaishno Devi Mandir in Haryana, The Awareness Cafe was born from a powerful idea — creating a space where people connect over delicious food.</p>
+              <p>Located on Garhi-Buredha Road in Sadharana Village, Gurugram, Haryana, The Awareness Cafe was born from a powerful idea — creating a space where people connect over delicious food.</p>
               <p>Founded in 2020 and officially started in 2022, what began as a small café serving breakfast and chai has evolved into a destination offering handcrafted pizzas, gourmet burgers, premium shakes, and artisanal coffees.</p>
               <p>Our name reflects our philosophy — <span className="text-[#C6FF00] font-medium">awareness in every bite</span>. Food should be prepared mindfully, served with love, and enjoyed fully.</p>
             </div>
@@ -170,7 +170,7 @@ export default function AboutContent() {
           <p className="text-gray-400 text-lg mb-8">Grab your friends and let us make your day brighter.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="/menu" className="neon-btn text-center py-4 px-8">🛒 Order Online</a>
-            <a href="tel:+917838485551" className="neon-btn-outline text-center py-4 px-8">📞 Call Now</a>
+            <a href="tel:+918750155505" className="neon-btn-outline text-center py-4 px-8">📞 Call Now</a>
           </div>
         </div>
       </section>

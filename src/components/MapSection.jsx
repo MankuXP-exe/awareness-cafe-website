@@ -34,7 +34,7 @@ export default function MapSection() {
             className="lg:col-span-2 rounded-2xl overflow-hidden border border-[#2a2a2a] h-[300px] sm:h-[400px] lg:h-[450px]"
           >
             <iframe
-              src="https://maps.google.com/maps?width=100%25&height=100%25&hl=en&q=The%20Awareness%20Cafe,%20Gadi%20Budhera%20Road,%20Near%20Vaishno%20Devi%20Mandir,%20Haryana+(The%20Awareness%20Cafe)&t=&z=15&ie=UTF8&iwloc=B&output=embed"
+              src="https://maps.google.com/maps?width=100%25&height=100%25&hl=en&q=The%20Awareness%20Cafe,%20Garhi-Buredha%20Road,%20Sadharana%20Village,%20Gurugram,%20Haryana+(The%20Awareness%20Cafe)&t=&z=15&ie=UTF8&iwloc=B&output=embed"
               width="100%"
               height="100%"
               style={{ border: 0, filter: "invert(90%) hue-rotate(180deg) brightness(0.95) contrast(0.9)" }}
@@ -62,7 +62,7 @@ export default function MapSection() {
                 <div>
                   <h4 className="text-white font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>Address</h4>
                   <p className="text-gray-400 text-sm leading-relaxed">
-                    Gadi Budhera Road, Near Vaishno Devi Mandir, Haryana 122505, India
+                    Garhi-Buredha Road, Sadharana Ki Dhani, Sadharana Village, Gurugram, Haryana 122505
                   </p>
                 </div>
               </div>
@@ -76,8 +76,8 @@ export default function MapSection() {
                 </div>
                 <div>
                   <h4 className="text-white font-bold mb-1" style={{ fontFamily: "var(--font-heading)" }}>Phone</h4>
-                  <a href="tel:+917838485551" className="text-[#C6FF00] hover:underline text-sm">
-                    +91 78384 85551
+                  <a href="tel:+918750155505" className="text-[#C6FF00] hover:underline text-sm">
+                    +91 87501 55505
                   </a>
                   <br />
                   <a href="tel:+917838485551" className="text-[#C6FF00] hover:underline text-sm">
@@ -104,7 +104,7 @@ export default function MapSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col gap-3">
               <a
-                href="https://www.google.com/maps/dir/?api=1&destination=The+Awareness+Cafe+Haryana"
+                href="https://www.google.com/maps/dir/?api=1&destination=The+Awareness+Cafe+Sadharana+Gurugram+Haryana"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="neon-btn-outline w-full flex items-center justify-center gap-2 group"
@@ -112,7 +112,7 @@ export default function MapSection() {
                 <MapPin className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
                 <span className="uppercase tracking-wider text-sm font-bold">GET DIRECTIONS</span>
               </a>
-              <a href="tel:+917838485551" className="neon-btn-outline text-center w-full">
+              <a href="tel:+918750155505" className="neon-btn-outline text-center w-full">
                 📞 Call Now
               </a>
             </div>

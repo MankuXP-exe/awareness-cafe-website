@@ -68,7 +68,7 @@ export default function Chatbot() {
       }
       setMessages((p) => [...p, { role: "assistant", content: reply.replace(/```json[\s\S]*?```/g, "").trim() || reply }]);
     } catch {
-      setMessages((p) => [...p, { role: "assistant", content: "Oops! Something went wrong 😅 Please try again or call +91 78384 85551!" }]);
+      setMessages((p) => [...p, { role: "assistant", content: "Oops! Something went wrong 😅 Please try again or call +91 87501 55505!" }]);
       toast.error("Chat error.");
     } finally { setIsLoading(false); }
   };

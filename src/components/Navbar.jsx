@@ -207,7 +207,7 @@ export default function Navbar() {
                 <Link href="/menu" onClick={() => setIsOpen(false)} className="neon-btn text-center !rounded-xl">
                   🛒 Order Online
                 </Link>
-                <a href="tel:+917838485551" className="neon-btn-outline text-center !rounded-xl">
+                <a href="tel:+918750155505" className="neon-btn-outline text-center !rounded-xl">
                   📞 Call Now
                 </a>
               </motion.div>
