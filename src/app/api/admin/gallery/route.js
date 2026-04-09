@@ -6,11 +6,18 @@ import { requireAuth } from "@/lib/auth";
 let bucketReady = false;
 async function ensureBucket(supabase) {
   if (bucketReady) return;
-  const { data } = await supabase.storage.getBucket("gallery");
-  if (!data) {
-    await supabase.storage.createBucket("gallery", { public: true, fileSizeLimit: 10 * 1024 * 1024 });
+  try {
+    const { data, error } = await supabase.storage.getBucket("gallery");
+    if (error && error.message.includes("not found")) {
+      const { error: createErr } = await supabase.storage.createBucket("gallery", { public: true, fileSizeLimit: 10 * 1024 * 1024 });
+      if (createErr && !createErr.message.includes("already exists")) {
+         console.error("Bucket creation failed:", createErr);
+      }
+    }
+    bucketReady = true;
+  } catch (err) {
+    console.warn("Could not ensure bucket:", err);
   }
-  bucketReady = true;
 }
 
 // GET — fetch gallery images
@@ -38,18 +45,14 @@ export async function POST(request) {
     const ext = file.name.split(".").pop();
     const fileName = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-    // Convert File to Buffer — required for Supabase Storage on Vercel serverless
-    const arrayBuf = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(arrayBuf);
-
-    // Upload to Supabase Storage
-    const { error: uploadError } = await supabase.storage.from("gallery").upload(fileName, fileBuffer, {
+    // Upload directly using the Web File API object (works natively on Vercel Node 18+)
+    const { error: uploadError } = await supabase.storage.from("gallery").upload(fileName, file, {
       contentType: file.type, upsert: true,
     });
 
     if (uploadError) {
       console.error("Gallery upload error:", uploadError);
-      return NextResponse.json({ error: "Upload failed: " + uploadError.message }, { status: 500 });
+      return NextResponse.json({ error: "Storage error: " + uploadError.message }, { status: 500 });
     }
 
     const { data: urlData } = supabase.storage.from("gallery").getPublicUrl(fileName);
@@ -59,11 +62,11 @@ export async function POST(request) {
       title, category, image_url: imageUrl,
     });
 
-    if (dbError) return NextResponse.json({ error: "DB save failed: " + dbError.message }, { status: 500 });
+    if (dbError) return NextResponse.json({ error: "DB error: " + dbError.message }, { status: 500 });
     return NextResponse.json({ success: true, url: imageUrl }, { status: 201 });
   } catch (err) {
     console.error("Gallery POST error:", err);
-    return NextResponse.json({ error: "Server error: " + (err.message || "Unknown") }, { status: 500 });
+    return NextResponse.json({ error: "Server sync error: " + err.message }, { status: 500 });
   }
 }
 
