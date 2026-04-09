@@ -2,6 +2,17 @@ import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAuth } from "@/lib/auth";
 
+// Ensure the "gallery" storage bucket exists (runs once per cold start)
+let bucketReady = false;
+async function ensureBucket(supabase) {
+  if (bucketReady) return;
+  const { data } = await supabase.storage.getBucket("gallery");
+  if (!data) {
+    await supabase.storage.createBucket("gallery", { public: true, fileSizeLimit: 10 * 1024 * 1024 });
+  }
+  bucketReady = true;
+}
+
 // GET — fetch gallery images
 export async function GET(request) {
   const supabase = createAdminClient();
@@ -23,6 +34,7 @@ export async function POST(request) {
     if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
 
     const supabase = createAdminClient();
+    await ensureBucket(supabase);
     const ext = file.name.split(".").pop();
     const fileName = `gallery/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
